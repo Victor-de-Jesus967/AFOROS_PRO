@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Aforos Pro - Kiko | HTML Puro</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <style>
+    :root {
+      --verde: #006633;
+      --verde-oscuro: #004d26;
+      --rojo: #ce1126;
+      --rojo-oscuro: #a80d1e;
+      --azul: #2563eb;
+      --fondo: #eef1f6;
+      --gris: #64748b;
+      --gris-claro: #f1f5f9;
+      --gris-borde: #d9e0ea;
+      --texto: #1e293b;
+      --blanco: #ffffff;
+      --sombra: 0 10px 24px rgba(15, 23, 42, 0.10);
+      --radio: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--fondo);
+      color: var(--texto);
+      font-family: Arial, Helvetica, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    input, select, textarea, button {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+    }
+
+    .app {
+      min-height: 100vh;
+      padding-bottom: 32px;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: #fff;
+      border-bottom: 4px solid var(--rojo);
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
+    }
+
+    .header-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 13px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: var(--verde);
+      color: white;
+      font-size: 22px;
+      box-shadow: 0 8px 16px rgba(0, 102, 51, 0.24);
+    }
+
+    .brand-title {
+      margin: 0;
+      color: var(--verde);
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-subtitle {
+      margin-top: 4px;
+      color: #6b7280;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ecfdf5;
+      border: 1px solid #bbf7d0;
+      color: var(--verde);
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+      gap: 22px;
+    }
+
+    .left, .right {
+      min-width: 0;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: 6px;
+      background: #dfe4ec;
+      border-radius: 16px;
+      box-shadow: inset 0 2px 5px rgba(15, 23, 42, 0.10);
+    }
+
+    .tab-btn {
+      padding: 13px 10px;
+      border-radius: 12px;
+      background: transparent;
+      color: #64748b;
+      font-weight: 900;
+      font-size: 13px;
+      transition: 0.18s ease;
+    }
+
+    .tab-btn.active {
+      background: white;
+      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+    }
+
+    .tab-btn.active.green {
+      color: var(--verde);
+    }
+
+    .tab-btn.active.red {
+      color: var(--rojo);
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--gris-borde);
+      border-radius: var(--radio);
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+      overflow: hidden;
+    }
+
+    .card-head {
+      background: #f8fafc;
+      border-bottom: 1px solid #e5eaf1;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 13px;
+      color: #334155;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .form-grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 10px;
+      color: #64748b;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .field input, .field select, .field textarea {
+      width: 100%;
+      border: 2px solid #e2e8f0;
+      background: white;
+      color: #1e293b;
+      border-radius: 10px;
+      padding: 10px 11px;
+      outline: none;
+      font-size: 15px;
+      font-weight: 700;
+      transition: 0.18s ease;
+    }
+
+    .field input[type="number"] {
+      text-align: right;
+      font-family: "Courier New", monospace;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .field input:focus, .field textarea:focus, .field select:focus {
+      border-color: var(--verde);
+      box-shadow: 0 0 0 3px rgba(0, 102, 51, 0.10);
+    }
+
+    .field.red input:focus {
+      border-color: var(--rojo);
+      box-shadow: 0 0 0 3px rgba(206, 17, 38, 0.10);
+    }
+
+    .field.orange input {
+      border-color: #fed7aa;
+      background: #fff7ed;
+    }
+
+    .divider {
+      height: 1px;
+      background: #edf1f6;
+      margin: 15px 0;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-radius: 11px;
+      font-size: 13px;
+      font-weight: 900;
+      transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+      box-shadow: 0 8px 15px rgba(15, 23, 42, 0.12);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn.green {
+      background: var(--verde);
+      color: white;
+    }
+
+    .btn.green:hover {
+      background: var(--verde-oscuro);
+    }
+
+    .btn.red {
+      background: var(--rojo);
+      color: white;
+    }
+
+    .btn.red:hover {
+      background: var(--rojo-oscuro);
+    }
+
+    .btn.dark {
+      background: #1f2937;
+      color: white;
+    }
+
+    .btn.blue {
+      background: var(--azul);
+      color: white;
+    }
+
+    .btn.light {
+      background: #e8eef7;
+      color: #334155;
+      box-shadow: none;
+    }
+
+    .btn.danger-light {
+      background: #fee2e2;
+      color: #b91c1c;
+      box-shadow: none;
+    }
+
+    .formula-btn {
+      background: transparent;
+      color: var(--azul);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .gas-mode {
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      background: #e2e8f0;
+      padding: 4px;
+      border-radius: 9px;
+    }
+
+    .gas-mode button {
+      background: transparent;
+      padding: 7px 10px;
+      border-radius: 7px;
+      color: #64748b;
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    .gas-mode button.active {
+      background: white;
+      color: var(--rojo);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.14);
+    }
+
+    .auto-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+
+    .auto-title {
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .auto-result {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      color: #1d4ed8;
+      font-size: 13px;
+      font-weight: 900;
+      min-height: 38px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .results-card {
+      position: sticky;
+      top: 88px;
+      background: white;
+      border-radius: var(--radio);
+      border: 1px solid #d9e0ea;
+      border-top: 5px solid #1f2937;
+      overflow: hidden;
+      box-shadow: var(--sombra);
+    }
+
+    .results-head {
+      background: #f1f5f9;
+      border-bottom: 1px solid #dbe3ed;
+      padding: 13px 16px;
+    }
+
+    .results-head h2 {
+      margin: 0;
+      font-size: 12px;
+      color: #475569;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .results-date {
+      text-align: right;
+      color: #64748b;
+      font-size: 10px;
+      font-weight: 900;
+      margin-top: 4px;
+    }
+
+    .results-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .mini-panel {
+      border-radius: 13px;
+      padding: 12px;
+      border: 1px solid #e5eaf1;
+      background: #f8fafc;
+    }
+
+    .mini-panel.blue {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+    }
+
+    .mini-panel.green {
+      background: #ecfdf5;
+      border-color: #bbf7d0;
+    }
+
+    .mini-title {
+      text-align: center;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      color: #475569;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .mini-title.blue {
+      color: #1d4ed8;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .metric-grid.two {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .metric {
+      background: white;
+      border-radius: 10px;
+      padding: 9px 6px;
+      text-align: center;
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.05);
+    }
+
+    .metric-value {
+      font-family: "Courier New", monospace;
+      color: #111827;
+      font-weight: 900;
+      font-size: 16px;
+      line-height: 1.1;
+      word-break: break-word;
+    }
+
+    .metric-label {
+      margin-top: 4px;
+      color: #94a3b8;
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .big-result {
+      text-align: center;
+      background: #ecfdf5;
+      border: 1px solid #bbf7d0;
+      border-radius: 14px;
+      padding: 14px 8px;
+    }
+
+    .big-number {
+      font-size: 44px;
+      line-height: 0.95;
+      font-weight: 900;
+      letter-spacing: -2px;
+      color: var(--verde);
+      word-break: break-word;
+    }
+
+    .big-number.red-text {
+      color: var(--rojo);
+    }
+
+    .big-label {
+      color: #047857;
+      font-size: 13px;
+      font-weight: 900;
+      margin-top: 4px;
+    }
+
+    .medium-number {
+      font-size: 22px;
+      font-weight: 900;
+      color: #475569;
+      margin-top: 9px;
+      border-top: 1px solid #bbf7d0;
+      padding-top: 9px;
+    }
+
+    .gas-result {
+      text-align: center;
+      padding-top: 14px;
+      border-top: 1px dashed #cbd5e1;
+    }
+
+    .gas-name {
+      font-size: 10px;
+      color: #64748b;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .gas-number {
+      color: #111827;
+      font-size: 34px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .gas-number span {
+      color: #94a3b8;
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+
+    .visual-card {
+      background: white;
+      border: 1px solid #d9e0ea;
+      border-radius: var(--radio);
+      padding: 16px;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+      min-height: 165px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tank {
+      width: 70px;
+      height: 120px;
+      border: 3px solid #64748b;
+      border-top: none;
+      border-radius: 0 0 18px 18px;
+      background: #f8fafc;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .oil {
+      width: 100%;
+      background: #334155;
+      min-height: 0%;
+      position: relative;
+      transition: height 0.45s ease;
+    }
+
+    .water {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background: rgba(59, 130, 246, 0.85);
+      border-top: 1px solid #60a5fa;
+      transition: height 0.45s ease;
+    }
+
+    .initial-line {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      border-top: 2px dashed #ef4444;
+      opacity: 0.85;
+      z-index: 3;
+    }
+
+    .tank-caption {
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 9px;
+      color: #94a3b8;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .filling {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      text-align: center;
+      color: var(--verde);
+      font-weight: 900;
+      font-size: 10px;
+    }
+
+    .arrow-up {
+      font-size: 26px;
+      animation: bounce 0.8s infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(4px); }
+      to { transform: translateY(-4px); }
+    }
+
+    .history-toggle {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+      padding: 14px 16px;
+      color: #334155;
+      font-weight: 900;
+    }
+
+    .history-toggle span:first-child {
+      font-size: 13px;
+    }
+
+    .history-toggle span:last-child {
+      color: var(--azul);
+      font-size: 10px;
+    }
+
+    .history-body {
+      padding: 16px;
+      border-top: 1px solid #e5eaf1;
+    }
+
+    .history-actions {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .table-wrap {
+      max-height: 230px;
+      overflow: auto;
+      border: 1px solid #e5eaf1;
+      border-radius: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: #f1f5f9;
+      color: #475569;
+      text-align: left;
+      padding: 9px;
+      font-size: 10px;
+      z-index: 1;
+    }
+
+    td {
+      padding: 9px;
+      border-top: 1px solid #edf1f6;
+      color: #475569;
+      vertical-align: top;
+    }
+
+    td.result-cell {
+      color: var(--verde);
+      font-weight: 900;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .truncate {
+      max-width: 150px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.62);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 760px;
+      background: #1e293b;
+      color: #cbd5e1;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: transparent;
+      color: #cbd5e1;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .modal h3 {
+      margin: 0 0 18px;
+      color: white;
+      font-size: 18px;
+    }
+
+    .formula-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+    }
+
+    .formula-box {
+      border-top: 1px solid #475569;
+      padding-top: 12px;
+    }
+
+    .formula-box h4 {
+      margin: 0 0 10px;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #86efac;
+      font-size: 13px;
+    }
+
+    .formula-box h4.red-title {
+      color: #fca5a5;
+    }
+
+    .note {
+      color: #94a3b8;
+      font-size: 11px;
+      line-height: 1.45;
+      margin-top: 7px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .empty-cell {
+      text-align: center;
+      color: #94a3b8;
+      padding: 14px;
+    }
+
+    .print-only {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .results-card {
+        position: static;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .header-inner {
+        padding: 11px 12px;
+      }
+
+      .brand-title {
+        font-size: 19px;
+      }
+
+      .brand-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .status-pill {
+        display: none;
+      }
+
+      .container {
+        padding: 18px 12px;
+      }
+
+      .form-grid, .form-grid.three, .formula-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .metric-grid.two {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .big-number {
+        font-size: 38px;
+      }
+
+      .actions .btn {
+        width: 100%;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .header, .tabs, .left, .visual-card, .btn, .formula-btn, .history-toggle, .history-body {
+        display: none !important;
+      }
+
+      .container {
+        display: block;
+        padding: 0;
+        max-width: none;
+      }
+
+      .results-card {
+        position: static;
+        box-shadow: none;
+        border: 1px solid #111827;
+        border-top: 5px solid #111827;
+        border-radius: 0;
+      }
+
+      .print-only {
+        display: block;
+        margin-bottom: 12px;
+      }
+
+      .print-only h1 {
+        margin: 0;
+        color: #111827;
+      }
+
+      .print-only p {
+        margin: 4px 0 0;
+        color: #475569;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="header-inner">
+        <div class="brand">
+          <div class="brand-icon">💧</div>
+          <div>
+            <h1 class="brand-title">AFOROS PRO</h1>
+            <div class="brand-subtitle">INGENIERÍA "KIKO"</div>
+          </div>
+        </div>
+        <div class="status-pill">● LOCAL / SIN INTERNET</div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="left stack">
+        <div class="tabs">
+          <button id="tabLiquidos" class="tab-btn active green" type="button">💧 TANQUES</button>
+          <button id="tabGas" class="tab-btn" type="button">🔥 GAS</button>
+        </div>
+
+        <section id="panelLiquidos" class="card">
+          <div class="card-head">
+            <h2 class="card-title">📄 Datos del aforo de líquidos</h2>
+            <button id="btnFormulas" class="formula-btn" type="button">📘 FÓRMULAS</button>
+          </div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="field">
+                <label for="liqFecha">Fecha</label>
+                <input id="liqFecha" type="date" />
+              </div>
+              <div class="field">
+                <label for="liqTanque">Tanque / Pozo</label>
+                <input id="liqTanque" type="text" value="TV-101 RABASA" />
+              </div>
+              <div class="field">
+                <label for="liqPozo">Pozo</label>
+                <input id="liqPozo" type="text" value="RABASA-101" />
+              </div>
+              <div class="field">
+                <label for="liqOperador">Operador</label>
+                <input id="liqOperador" type="text" placeholder="Nombre del operador" />
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="liqInicial">Inicial (cm)</label>
+                <input id="liqInicial" type="number" step="0.01" value="120" />
+              </div>
+              <div class="field">
+                <label for="liqFinal">Final (cm)</label>
+                <input id="liqFinal" type="number" step="0.01" value="345" />
+              </div>
+              <div class="field orange">
+                <label for="liqConstante">Constante (m³/cm)</label>
+                <input id="liqConstante" type="number" step="0.0001" value="1.156" />
+              </div>
+              <div class="field">
+                <label for="liqHoras">Horas</label>
+                <input id="liqHoras" type="number" step="0.01" value="4" />
+              </div>
+              <div class="field">
+                <label for="liqInterfase">Interfase / agua (cm)</label>
+                <input id="liqInterfase" type="number" step="0.01" value="10" />
+              </div>
+              <div class="field">
+                <label for="liqDiametro">Diámetro tanque (m) opcional</label>
+                <input id="liqDiametro" type="number" step="0.01" value="0" />
+              </div>
+              <div class="field full">
+                <label for="liqObservaciones">Observaciones</label>
+                <textarea id="liqObservaciones" rows="2" placeholder="Condiciones de operación, comentarios o incidencias"></textarea>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button id="btnCalcularConstante" class="btn light" type="button">📐 Calcular constante por diámetro</button>
+              <button id="btnLimpiarLiquidos" class="btn light" type="button">🧹 Limpiar</button>
+              <button id="btnGuardarLiquidos" class="btn green" type="button">💾 Guardar medición</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="panelGas" class="card hidden">
+          <div class="card-head">
+            <h2 class="card-title">🔥 Datos del aforo de gas</h2>
+            <div class="gas-mode">
+              <button id="gasManual" class="active" type="button">MANUAL</button>
+              <button id="gasAuto" type="button">AUTO</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="field red">
+                <label for="gasFecha">Fecha</label>
+                <input id="gasFecha" type="date" />
+              </div>
+              <div class="field red">
+                <label for="gasTitulo">Identificación</label>
+                <input id="gasTitulo" type="text" value="MEDICIÓN AGA-3" />
+              </div>
+              <div class="field red">
+                <label for="gasOperador">Operador</label>
+                <input id="gasOperador" type="text" placeholder="Nombre del operador" />
+              </div>
+              <div class="field red">
+                <label for="gasInstalacion">Instalación</label>
+                <input id="gasInstalacion" type="text" placeholder="Batería / estación / pozo" />
+              </div>
+            </div>
+
+            <div id="autoBox" class="auto-box hidden">
+              <div class="auto-title">Cálculo aproximado del coeficiente C'</div>
+              <div class="form-grid three">
+                <div class="field red">
+                  <label for="gasOrificio">Diám. orificio</label>
+                  <input id="gasOrificio" type="number" step="0.001" value="1.500" />
+                </div>
+                <div class="field red">
+                  <label for="gasTemp">Temp. flujo °C</label>
+                  <input id="gasTemp" type="number" step="0.01" value="35" />
+                </div>
+                <div class="field red">
+                  <label for="gasGravedad">Gravedad esp.</label>
+                  <input id="gasGravedad" type="number" step="0.001" value="0.700" />
+                </div>
+                <div class="auto-result full">C' estimado: <span id="gasCestimado">0.0000</span></div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="form-grid">
+              <div class="field orange">
+                <label for="gasConstante">Coeficiente C'</label>
+                <input id="gasConstante" type="number" step="0.0001" value="0.5019" />
+              </div>
+              <div class="field red">
+                <label for="gasEstatica">Lectura estática</label>
+                <input id="gasEstatica" type="number" step="0.01" value="6.4" />
+              </div>
+              <div class="field red">
+                <label for="gasDiferencial">Lectura diferencial</label>
+                <input id="gasDiferencial" type="number" step="0.01" value="5.8" />
+              </div>
+              <div class="field red">
+                <label for="gasPresionBase">Presión base</label>
+                <input id="gasPresionBase" type="number" step="0.01" value="14.73" />
+              </div>
+              <div class="field full red">
+                <label for="gasObservaciones">Observaciones</label>
+                <textarea id="gasObservaciones" rows="2" placeholder="Condiciones de operación, comentarios o incidencias"></textarea>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button id="btnLimpiarGas" class="btn light" type="button">🧹 Limpiar</button>
+              <button id="btnGuardarGas" class="btn red" type="button">💾 Guardar gas</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <button id="btnToggleHistory" class="history-toggle" type="button">
+            <span>📊 HISTORIAL LOCAL</span>
+            <span id="historyLabel">MOSTRAR</span>
+          </button>
+          <div id="historyBody" class="history-body hidden">
+            <div class="history-actions">
+              <button id="btnExportCSV" class="btn green" type="button">📥 Descargar CSV</button>
+              <button id="btnClearHistory" class="btn danger-light" type="button">🗑️</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>FECHA</th>
+                    <th>TIPO</th>
+                    <th>IDENTIFICACIÓN</th>
+                    <th style="text-align:right;">RESULTADO</th>
+                  </tr>
+                </thead>
+                <tbody id="historyTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <aside class="right stack">
+        <section class="results-card">
+          <div class="print-only">
+            <h1>AFOROS PRO - REPORTE DE MEDICIÓN</h1>
+            <p>Documento generado localmente desde archivo HTML.</p>
+          </div>
+
+          <div class="results-head">
+            <h2>Resultados</h2>
+            <div class="results-date">FECHA AFORO: <span id="resFecha">---</span></div>
+          </div>
+
+          <div class="results-body">
+            <div id="liqResultsBlock">
+              <div class="mini-panel">
+                <div class="mini-title blue">Ritmo de subida</div>
+                <div class="metric-grid">
+                  <div class="metric">
+                    <div id="resCmHora" class="metric-value">0.00</div>
+                    <div class="metric-label">cm/hr</div>
+                  </div>
+                  <div class="metric">
+                    <div id="resM3Hora" class="metric-value">0.00</div>
+                    <div class="metric-label">m³/hr</div>
+                  </div>
+                  <div class="metric">
+                    <div id="resBlsHora" class="metric-value">0.00</div>
+                    <div class="metric-label">bls/hr</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="height: 16px;"></div>
+
+              <div class="mini-title">Producción diaria proyectada a 24 horas</div>
+              <div class="big-result">
+                <div id="resBPD" class="big-number">0</div>
+                <div class="big-label">BPD</div>
+                <div id="resM3Dia" class="medium-number">0.0 M³/D</div>
+              </div>
+
+              <div style="height: 16px;"></div>
+
+              <div class="mini-panel blue">
+                <div id="resAccumTitle" class="mini-title blue">Total acumulado durante el aforo</div>
+                <div class="metric-grid two">
+                  <div class="metric">
+                    <div id="resVolBls" class="metric-value">0.0</div>
+                    <div class="metric-label">BLS bruto</div>
+                  </div>
+                  <div class="metric">
+                    <div id="resVolM3" class="metric-value">0.0</div>
+                    <div class="metric-label">M³ bruto</div>
+                  </div>
+                  <div class="metric">
+                    <div id="resVolNetoBls" class="metric-value">0.0</div>
+                    <div class="metric-label">BLS neto aprox.</div>
+                  </div>
+                  <div class="metric">
+                    <div id="resVolNetoM3" class="metric-value">0.0</div>
+                    <div class="metric-label">M³ neto aprox.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="gasResultsBlock" class="hidden">
+              <div class="gas-result">
+                <div id="resGasTitle" class="gas-name">MEDICIÓN AGA-3</div>
+                <div class="gas-number"><span id="resGas">0.000</span> <span>MMPCD</span></div>
+              </div>
+
+              <div class="mini-panel" style="margin-top: 16px;">
+                <div class="mini-title blue">Datos usados para cálculo</div>
+                <div class="metric-grid">
+                  <div class="metric">
+                    <div id="resGasC" class="metric-value">0.0000</div>
+                    <div class="metric-label">C'</div>
+                  </div>
+                  <div class="metric">
+                    <div id="resGasLe" class="metric-value">0.00</div>
+                    <div class="metric-label">Le</div>
+                  </div>
+                  <div class="metric">
+                    <div id="resGasLd" class="metric-value">0.00</div>
+                    <div class="metric-label">Ld</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button id="btnPrint" class="btn dark" type="button">🖨️ IMPRIMIR PDF</button>
+          </div>
+        </section>
+
+        <section id="visualTank" class="visual-card">
+          <div class="tank">
+            <div id="oilLevel" class="oil" style="height: 50%;">
+              <div id="waterLevel" class="water" style="height: 5%;"></div>
+              <div id="initialLine" class="initial-line" style="bottom: 35%;"></div>
+            </div>
+          </div>
+          <div id="fillingLabel" class="filling hidden">
+            <div class="arrow-up">⬆</div>
+            <div>LLENANDO</div>
+          </div>
+          <div class="tank-caption">Nivel tanque</div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <div id="formulaModal" class="modal-backdrop hidden">
+    <div class="modal">
+      <button id="btnCloseModal" class="modal-close" type="button">×</button>
+      <h3>📘 Fundamentos técnicos usados</h3>
+      <div class="formula-grid">
+        <div class="formula-box">
+          <h4>1. Líquidos / tanques</h4>
+          <p>Δh = Final - Inicial</p>
+          <p>Vol bruto m³ = Δh × K</p>
+          <p>Vol bruto bls = m³ × 6.28981</p>
+          <p>Prod. diaria = Vol × (24 / horas)</p>
+          <p>Vol neto aprox. = (Δh - interfase) × K</p>
+          <div class="note">La interfase se usa aquí como aproximación para descontar agua cuando el operador desea estimar volumen neto. Ajusta este criterio si tu procedimiento interno usa otra forma de corrección.</div>
+        </div>
+        <div class="formula-box">
+          <h4 class="red-title">2. Gas / cálculo operativo</h4>
+          <p>Q = C' × Le × Ld</p>
+          <p>Modo manual: C' lo captura el operador.</p>
+          <p>Modo auto: C' se estima con una relación simplificada.</p>
+          <div class="note">Esta pantalla conserva el enfoque operativo de tu código original. Si se va a documentar formalmente como AGA-3, conviene validar factores, unidades y condiciones base con el procedimiento técnico correspondiente.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    "use strict";
+
+    var activeTab = "liquidos";
+    var gasMode = "manual";
+    var historyData = [];
+    var STORAGE_KEY = "aforos_history_puro_html";
+    var BLS_PER_M3 = 6.28981;
+
+    function $(id) {
+      return document.getElementById(id);
+    }
+
+    function todayISO() {
+      var d = new Date();
+      var y = d.getFullYear();
+      var m = String(d.getMonth() + 1).padStart(2, "0");
+      var day = String(d.getDate()).padStart(2, "0");
+      return y + "-" + m + "-" + day;
+    }
+
+    function num(id) {
+      var value = parseFloat($(id).value);
+      return isNaN(value) ? 0 : value;
+    }
+
+    function text(id) {
+      return ($(id).value || "").trim();
+    }
+
+    function formatNumber(value, digits) {
+      digits = typeof digits === "number" ? digits : 2;
+      if (typeof value !== "number" || isNaN(value) || !isFinite(value)) value = 0;
+      return value.toLocaleString("en-US", {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits
+      });
+    }
+
+    function escapeCSV(value) {
+      value = String(value == null ? "" : value);
+      if (/[",\n]/.test(value)) {
+        return '"' + value.replace(/"/g, '""') + '"';
+      }
+      return value;
+    }
+
+    function calculateLiquids() {
+      var inicial = num("liqInicial");
+      var final = num("liqFinal");
+      var constante = num("liqConstante");
+      var horas = num("liqHoras");
+      var interfase = num("liqInterfase");
+
+      var diferencial = final - inicial;
+      var horasSeguras = horas > 0 ? horas : 1;
+      var factorTiempo = horas > 0 ? (24 / horas) : 0;
+
+      var volBrutoM3 = diferencial * constante;
+      var volBrutoBls = volBrutoM3 * BLS_PER_M3;
+
+      var alturaNeta = Math.max(diferencial - interfase, 0);
+      var volNetoM3 = alturaNeta * constante;
+      var volNetoBls = volNetoM3 * BLS_PER_M3;
+
+      var prodDiariaM3 = volBrutoM3 * factorTiempo;
+      var prodDiariaBPD = prodDiariaM3 * BLS_PER_M3;
+
+      var cmPorHora = diferencial / horasSeguras;
+      var m3PorHora = volBrutoM3 / horasSeguras;
+      var blsPorHora = volBrutoBls / horasSeguras;
+
+      return {
+        diferencial: diferencial,
+        volBrutoM3: volBrutoM3,
+        volBrutoBls: volBrutoBls,
+        volNetoM3: volNetoM3,
+        volNetoBls: volNetoBls,
+        prodDiariaM3: prodDiariaM3,
+        prodDiariaBPD: prodDiariaBPD,
+        cmPorHora: cmPorHora,
+        m3PorHora: m3PorHora,
+        blsPorHora: blsPorHora,
+        horas: horas,
+        inicial: inicial,
+        final: final,
+        interfase: interfase
+      };
+    }
+
+    function calculateGasFactors() {
+      var diametroOrificio = num("gasOrificio");
+      var tempFlujo = num("gasTemp");
+      var gravedadEsp = num("gasGravedad") || 1;
+
+      var tempF = (tempFlujo * 9 / 5) + 32;
+      var tempR = tempF + 460;
+      var Ftf = Math.sqrt(520 / tempR);
+      var Fg = Math.sqrt(1 / gravedadEsp);
+      var Fb = 338.17 * Math.pow(diametroOrificio, 2);
+      var Cestimado = 0.0022 * Fb * Ftf * Fg;
+
+      return {
+        Ftf: Ftf,
+        Fg: Fg,
+        Fb: Fb,
+        Cestimado: Cestimado
+      };
+    }
+
+    function calculateGas() {
+      var factors = calculateGasFactors();
+      var c = gasMode === "auto" ? factors.Cestimado : num("gasConstante");
+      var le = num("gasEstatica");
+      var ld = num("gasDiferencial");
+      var q = c * le * ld;
+
+      return {
+        c: c,
+        le: le,
+        ld: ld,
+        q: q,
+        factors: factors
+      };
+    }
+
+    function updateLiquidResults() {
+      var r = calculateLiquids();
+      $("resFecha").textContent = $("liqFecha").value || "---";
+      $("resCmHora").textContent = formatNumber(r.cmPorHora, 2);
+      $("resM3Hora").textContent = formatNumber(r.m3PorHora, 2);
+      $("resBlsHora").textContent = formatNumber(r.blsPorHora, 2);
+      $("resBPD").textContent = formatNumber(r.prodDiariaBPD, 0);
+      $("resBPD").classList.toggle("red-text", r.prodDiariaBPD < 0);
+      $("resM3Dia").textContent = formatNumber(r.prodDiariaM3, 1) + " M³/D";
+      $("resAccumTitle").textContent = "Total acumulado durante las horas del aforo (" + formatNumber(r.horas, 2) + " hrs)";
+      $("resVolBls").textContent = formatNumber(r.volBrutoBls, 1);
+      $("resVolM3").textContent = formatNumber(r.volBrutoM3, 1);
+      $("resVolNetoBls").textContent = formatNumber(r.volNetoBls, 1);
+      $("resVolNetoM3").textContent = formatNumber(r.volNetoM3, 1);
+
+      updateTankVisual(r);
+    }
+
+    function updateGasResults() {
+      var r = calculateGas();
+      $("resFecha").textContent = $("gasFecha").value || "---";
+      $("gasCestimado").textContent = formatNumber(r.factors.Cestimado, 4);
+      $("resGasTitle").textContent = text("gasTitulo") || "MEDICIÓN GAS";
+      $("resGas").textContent = formatNumber(r.q, 3);
+      $("resGasC").textContent = formatNumber(r.c, 4);
+      $("resGasLe").textContent = formatNumber(r.le, 2);
+      $("resGasLd").textContent = formatNumber(r.ld, 2);
+
+      if (gasMode === "auto") {
+        $("gasConstante").value = r.factors.Cestimado.toFixed(4);
+      }
+    }
+
+    function updateTankVisual(r) {
+      var maxVisual = Math.max(r.final, r.inicial, 500, 1);
+      var oilHeight = Math.min(Math.max((r.final / maxVisual) * 100, 0), 100);
+      var waterHeight = r.final > 0 ? Math.min(Math.max((r.interfase / r.final) * 100, 0), 100) : 0;
+      var initialBottom = r.final > 0 ? Math.min(Math.max((r.inicial / r.final) * 100, 0), 100) : 0;
+
+      $("oilLevel").style.height = oilHeight + "%";
+      $("waterLevel").style.height = waterHeight + "%";
+      $("initialLine").style.bottom = initialBottom + "%";
+      $("fillingLabel").classList.toggle("hidden", !(r.final > r.inicial));
+    }
+
+    function updateAll() {
+      if (activeTab === "liquidos") {
+        updateLiquidResults();
+      } else {
+        updateGasResults();
+      }
+    }
+
+    function setTab(tab) {
+      activeTab = tab;
+      var isLiquids = tab === "liquidos";
+
+      $("tabLiquidos").classList.toggle("active", isLiquids);
+      $("tabLiquidos").classList.toggle("green", isLiquids);
+      $("tabGas").classList.toggle("active", !isLiquids);
+      $("tabGas").classList.toggle("red", !isLiquids);
+      $("panelLiquidos").classList.toggle("hidden", !isLiquids);
+      $("panelGas").classList.toggle("hidden", isLiquids);
+      $("liqResultsBlock").classList.toggle("hidden", !isLiquids);
+      $("gasResultsBlock").classList.toggle("hidden", isLiquids);
+      $("visualTank").classList.toggle("hidden", !isLiquids);
+
+      updateAll();
+    }
+
+    function setGasMode(mode) {
+      gasMode = mode;
+      var isAuto = mode === "auto";
+      $("gasManual").classList.toggle("active", !isAuto);
+      $("gasAuto").classList.toggle("active", isAuto);
+      $("autoBox").classList.toggle("hidden", !isAuto);
+      $("gasConstante").disabled = isAuto;
+      updateGasResults();
+    }
+
+    function saveHistory() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(historyData));
+    }
+
+    function loadHistory() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        historyData = raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        historyData = [];
+      }
+      renderHistory();
+    }
+
+    function renderHistory() {
+      var tbody = $("historyTable");
+      tbody.innerHTML = "";
+
+      if (!historyData.length) {
+        var trEmpty = document.createElement("tr");
+        var tdEmpty = document.createElement("td");
+        tdEmpty.colSpan = 4;
+        tdEmpty.className = "empty-cell";
+        tdEmpty.textContent = "Historial vacío";
+        trEmpty.appendChild(tdEmpty);
+        tbody.appendChild(trEmpty);
+        return;
+      }
+
+      historyData.forEach(function(row) {
+        var tr = document.createElement("tr");
+
+        var tdFecha = document.createElement("td");
+        tdFecha.textContent = row.fecha;
+        tr.appendChild(tdFecha);
+
+        var tdTipo = document.createElement("td");
+        tdTipo.textContent = row.tipo;
+        tr.appendChild(tdTipo);
+
+        var tdId = document.createElement("td");
+        tdId.className = "truncate";
+        tdId.title = row.identificador;
+        tdId.textContent = row.identificador;
+        tr.appendChild(tdId);
+
+        var tdRes = document.createElement("td");
+        tdRes.className = "result-cell";
+        tdRes.textContent = row.resultadoPrincipal;
+        tr.appendChild(tdRes);
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function addRecord(type) {
+      var record;
+
+      if (type === "LIQUIDO") {
+        var r = calculateLiquids();
+        record = {
+          id: Date.now(),
+          tipo: "LIQUIDO",
+          fecha: $("liqFecha").value,
+          operador: text("liqOperador"),
+          identificador: (text("liqPozo") || "SIN POZO") + " - " + (text("liqTanque") || "SIN TANQUE"),
+          resultadoPrincipal: formatNumber(r.prodDiariaBPD, 0) + " BPD",
+          detalle: "Vol bruto: " + formatNumber(r.volBrutoBls, 1) + " BLS | Vol neto aprox.: " + formatNumber(r.volNetoBls, 1) + " BLS | Horas: " + formatNumber(r.horas, 2),
+          observaciones: text("liqObservaciones"),
+          timestamp: new Date().toLocaleString()
+        };
+      } else {
+        var g = calculateGas();
+        record = {
+          id: Date.now(),
+          tipo: "GAS",
+          fecha: $("gasFecha").value,
+          operador: text("gasOperador"),
+          identificador: text("gasTitulo") || "MEDICIÓN GAS",
+          resultadoPrincipal: formatNumber(g.q, 3) + " MMPCD",
+          detalle: "Le: " + formatNumber(g.le, 2) + " | Ld: " + formatNumber(g.ld, 2) + " | C': " + formatNumber(g.c, 4) + " | Modo: " + gasMode.toUpperCase(),
+          observaciones: text("gasObservaciones"),
+          timestamp: new Date().toLocaleString()
+        };
+      }
+
+      historyData.unshift(record);
+      saveHistory();
+      renderHistory();
+      alert("✅ Registro guardado localmente en este navegador.");
+    }
+
+    function exportCSV() {
+      if (!historyData.length) {
+        alert("No hay historial para exportar.");
+        return;
+      }
+
+      var headers = ["FECHA", "HORA_REGISTRO", "TIPO", "OPERADOR", "IDENTIFICACION", "RESULTADO_PRINCIPAL", "DETALLES_TECNICOS", "OBSERVACIONES"];
+      var rows = historyData.map(function(row) {
+        return [
+          row.fecha,
+          row.timestamp,
+          row.tipo,
+          row.operador || "",
+          row.identificador,
+          row.resultadoPrincipal,
+          row.detalle,
+          row.observaciones || ""
+        ].map(escapeCSV).join(",");
+      });
+
+      var csv = headers.join(",") + "\n" + rows.join("\n");
+      var blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement("a");
+      link.href = url;
+      link.download = "Historial_Aforos_Kiko_" + todayISO() + ".csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function clearHistory() {
+      if (confirm("¿Estás seguro de borrar todo el historial local?")) {
+        historyData = [];
+        saveHistory();
+        renderHistory();
+      }
+    }
+
+    function calcularConstantePorDiametro() {
+      var diametro = num("liqDiametro");
+      if (diametro <= 0) {
+        alert("Captura el diámetro del tanque en metros.");
+        return;
+      }
+
+      var radio = diametro / 2;
+      var volM3porCM = Math.PI * Math.pow(radio, 2) * 0.01;
+      $("liqConstante").value = volM3porCM.toFixed(4);
+      updateLiquidResults();
+    }
+
+    function limpiarLiquidos() {
+      $("liqInicial").value = 0;
+      $("liqFinal").value = 0;
+      $("liqInterfase").value = 0;
+      $("liqHoras").value = 0;
+      $("liqObservaciones").value = "";
+      updateLiquidResults();
+    }
+
+    function limpiarGas() {
+      $("gasEstatica").value = 0;
+      $("gasDiferencial").value = 0;
+      $("gasObservaciones").value = "";
+      updateGasResults();
+    }
+
+    function bindEvents() {
+      $("tabLiquidos").addEventListener("click", function() { setTab("liquidos"); });
+      $("tabGas").addEventListener("click", function() { setTab("gas"); });
+      $("gasManual").addEventListener("click", function() { setGasMode("manual"); });
+      $("gasAuto").addEventListener("click", function() { setGasMode("auto"); });
+
+      $("btnGuardarLiquidos").addEventListener("click", function() { addRecord("LIQUIDO"); });
+      $("btnGuardarGas").addEventListener("click", function() { addRecord("GAS"); });
+      $("btnExportCSV").addEventListener("click", exportCSV);
+      $("btnClearHistory").addEventListener("click", clearHistory);
+      $("btnCalcularConstante").addEventListener("click", calcularConstantePorDiametro);
+      $("btnLimpiarLiquidos").addEventListener("click", limpiarLiquidos);
+      $("btnLimpiarGas").addEventListener("click", limpiarGas);
+      $("btnPrint").addEventListener("click", function() { window.print(); });
+
+      $("btnToggleHistory").addEventListener("click", function() {
+        var hidden = $("historyBody").classList.toggle("hidden");
+        $("historyLabel").textContent = hidden ? "MOSTRAR" : "OCULTAR";
+      });
+
+      $("btnFormulas").addEventListener("click", function() {
+        $("formulaModal").classList.remove("hidden");
+      });
+      $("btnCloseModal").addEventListener("click", function() {
+        $("formulaModal").classList.add("hidden");
+      });
+      $("formulaModal").addEventListener("click", function(e) {
+        if (e.target === $("formulaModal")) $("formulaModal").classList.add("hidden");
+      });
+
+      var inputs = document.querySelectorAll("input, textarea, select");
+      inputs.forEach(function(input) {
+        input.addEventListener("input", updateAll);
+        input.addEventListener("change", updateAll);
+      });
+    }
+
+    function init() {
+      $("liqFecha").value = todayISO();
+      $("gasFecha").value = todayISO();
+      bindEvents();
+      loadHistory();
+      setTab("liquidos");
+      setGasMode("manual");
+      updateAll();
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>
